@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Tracker Pro</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#4f46e5', // Indigo 600
+                        secondary: '#64748b', // Slate 500
+                        income: '#10b981', // Emerald 500
+                        expense: '#ef4444', // Red 500
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex items-center justify-center p-4">
+
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-4xl overflow-hidden flex flex-col md:flex-row min-h-[600px]">
+        
+        <!-- LEFT PANEL: Dashboard & Input -->
+        <div class="w-full md:w-5/12 bg-slate-50 p-6 md:p-8 flex flex-col border-r border-slate-200">
+            <header class="mb-8">
+                <h1 class="text-2xl font-bold text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-wallet text-primary"></i> FinTrack Pro
+                </h1>
+                <p class="text-sm text-slate-500 mt-1">Manage your personal finances</p>
+            </header>
+
+            <!-- Balance Card -->
+            <div class="bg-gradient-to-r from-indigo-600 to-blue-500 rounded-xl p-6 text-white shadow-lg mb-6 transform transition hover:scale-[1.02]">
+                <h3 class="text-indigo-100 text-sm font-medium uppercase tracking-wider mb-1">Total Balance</h3>
+                <h2 id="balance" class="text-3xl font-bold tracking-tight">$0.00</h2>
+            </div>
+
+            <!-- Income / Expense Summary -->
+            <div class="grid grid-cols-2 gap-4 mb-8">
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+                    <h4 class="text-xs text-slate-400 font-semibold uppercase">Income</h4>
+                    <p id="money-plus" class="text-emerald-500 font-bold text-lg mt-1">+$0.00</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+                    <h4 class="text-xs text-slate-400 font-semibold uppercase">Expense</h4>
+                    <p id="money-minus" class="text-rose-500 font-bold text-lg mt-1">-$0.00</p>
+                </div>
+            </div>
+
+            <!-- Form -->
+            <div class="mt-auto">
+                <h3 class="text-slate-700 font-semibold mb-4 border-b pb-2">Add Transaction</h3>
+                <form id="form" class="space-y-4">
+                    <div class="relative">
+                        <label for="text" class="text-xs font-semibold text-slate-500 mb-1 block">Description</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-3 text-slate-400"><i class="fa-solid fa-tag"></i></span>
+                            <input type="text" id="text" class="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-sm" placeholder="e.g. Salary, Groceries" required>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="amount" class="text-xs font-semibold text-slate-500 mb-1 block">Amount <span class="text-xs font-normal text-slate-400">(Negative for expense)</span></label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-3 text-slate-400"><i class="fa-solid fa-dollar-sign"></i></span>
+                            <input type="number" id="amount" class="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-sm" placeholder="e.g. -150 or 2000" required>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-3 pt-2">
+                        <button type="submit" id="submit-btn" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-lg transition-colors shadow-md flex justify-center items-center gap-2">
+                            <i class="fa-solid fa-plus"></i> <span>Add</span>
+                        </button>
+                        <button type="button" id="reset-btn" class="px-4 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-600 rounded-lg transition-colors" title="Reset Fields">
+                            <i class="fa-solid fa-rotate-left"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- RIGHT PANEL: History & Filters -->
+        <div class="w-full md:w-7/12 bg-white p-6 md:p-8 flex flex-col">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-slate-800">History</h3>
+                
+                <!-- Radio Filters Styled as Toggle -->
+                <div class="bg-slate-100 p-1 rounded-lg flex text-xs font-medium">
+                    <label class="cursor-pointer">
+                        <input type="radio" name="filter" value="all" checked class="peer sr-only">
+                        <span class="block px-3 py-1.5 rounded-md text-slate-500 peer-checked:bg-white peer-checked:text-indigo-600 peer-checked:shadow-sm transition-all">All</span>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="filter" value="income" class="peer sr-only">
+                        <span class="block px-3 py-1.5 rounded-md text-slate-500 peer-checked:bg-white peer-checked:text-emerald-600 peer-checked:shadow-sm transition-all">Income</span>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="filter" value="expense" class="peer sr-only">
+                        <span class="block px-3 py-1.5 rounded-md text-slate-500 peer-checked:bg-white peer-checked:text-rose-600 peer-checked:shadow-sm transition-all">Expense</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Transaction List -->
+            <ul id="list" class="transaction-list flex-1 overflow-y-auto pr-2 space-y-3">
+                <!-- Transactions will be injected here via JS -->
+            </ul>
+
+            <!-- Empty State (Hidden by default) -->
+            <div id="empty-state" class="hidden flex-col items-center justify-center h-full text-slate-400">
+                <i class="fa-solid fa-receipt text-4xl mb-3 opacity-30"></i>
+                <p class="text-sm">No transactions found.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Javascript Logic -->
+    <script src="script.js"></script>
+</body>
+</html>
