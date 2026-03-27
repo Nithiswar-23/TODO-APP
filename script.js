@@ -55,12 +55,24 @@ function handleTransactionSubmit(e) {
         return;
     }
 
-    const transactionData = {
-        id: editMode ? editId : generateID(),
-        text: textEl.value,
-        amount: +amountEl.value,
-        date: new Date().toLocaleDateString() // Added date for professionalism
-    };
+    const type = document.querySelector('input[name="type"]:checked').value;
+
+let amount = +amountEl.value;
+
+// Fix: ensure correct sign
+if (type === 'expense') {
+    amount = -Math.abs(amount);
+} else {
+    amount = Math.abs(amount);
+}
+
+const transactionData = {
+    id: editMode ? editId : generateID(),
+    text: textEl.value,
+    amount: amount,
+    type: type,
+    date: new Date().toLocaleDateString()
+};
 
     if (editMode) {
         transactions = transactions.map(t => (t.id === editId ? transactionData : t));
@@ -169,7 +181,8 @@ window.enterEditMode = function(id) {
     if (!transaction) return;
 
     textEl.value = transaction.text;
-    amountEl.value = transaction.amount;
+    amountEl.value = Math.abs(transaction.amount);
+    document.querySelector(`input[name="type"][value="${transaction.amount < 0 ? 'expense' : 'income'}"]`).checked = true;
     editMode = true;
     editId = id;
 
@@ -199,6 +212,7 @@ formEl.addEventListener('submit', handleTransactionSubmit);
 
 resetBtn.addEventListener('click', () => {
     exitEditMode();
+    document.querySelector('input[name="type"][value="income"]').checked = true;
 });
 
 Array.from(filterRadios).forEach(radio => {

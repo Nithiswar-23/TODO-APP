@@ -73,9 +73,21 @@
                             <input type="text" id="text" class="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-sm" placeholder="e.g. Salary, Groceries" required>
                         </div>
                     </div>
-                    
                     <div>
-                        <label for="amount" class="text-xs font-semibold text-slate-500 mb-1 block">Amount <span class="text-xs font-normal text-slate-400">(Negative for expense)</span></label>
+    <label class="text-xs font-semibold text-slate-500 mb-1 block">Type</label>
+    <div class="flex gap-4 text-sm">
+        <label class="flex items-center gap-1 cursor-pointer">
+            <input type="radio" name="type" value="income" checked>
+            Income
+        </label>
+        <label class="flex items-center gap-1 cursor-pointer">
+            <input type="radio" name="type" value="expense">
+            Expense
+        </label>
+    </div>
+</div>
+                    <div>
+                        <label for="amount" class="text-xs font-semibold text-slate-500 mb-1 block">Amount <span class="text-xs font-normal text-slate-400">(Enter amount)</span></label>
                         <div class="relative">
                             <span class="absolute left-3 top-3 text-slate-400"><i class="fa-solid fa-dollar-sign"></i></span>
                             <input type="number" id="amount" class="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-sm" placeholder="e.g. -150 or 2000" required>
